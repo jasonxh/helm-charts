@@ -60,3 +60,25 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Create the name of the arlo secret to use
+*/}}
+{{- define "arlo-mqtt.arloSecretName" -}}
+{{- if .Values.credentials.arlo.existingSecret }}
+{{- .Values.credentials.arlo.existingSecret }}
+{{- else }}
+{{- include "arlo-mqtt.fullname" . }}-arlo-creds
+{{- end }}
+{{- end }}
+
+{{/*
+Create the name of the MQTT secret to use
+*/}}
+{{- define "arlo-mqtt.mqttSecretName" -}}
+{{- if .Values.credentials.mqtt.existingSecret }}
+{{- .Values.credentials.mqtt.existingSecret }}
+{{- else }}
+{{- include "arlo-mqtt.fullname" . }}-mqtt-creds
+{{- end }}
+{{- end }}

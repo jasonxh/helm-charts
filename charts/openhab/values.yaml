@@ -1,43 +1,31 @@
-# Default values for arlo-mqtt.
+# Default values for openhab.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+
+persistence:
+  enabled: false
+
+  # existingClaim: ""
+
+extraVolumes: []
+extraVolumeMounts: []
 
 replicaCount: 1
 
 image:
-  repository: jasonxh/arlo-mqtt
-  pullPolicy: Always
+  repository: openhab/openhab
+  pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
+
+frontailImage:
+  repository: welteki/frontail-openhab
+  pullPolicy: IfNotPresent
+  tag: frontail4.9.2
 
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-
-mqtt:
-  broker: mosquitto
-  port: 1883
-
-credentials:
-  arlo:
-    username:
-    password:
-  mqtt:
-    username:
-    password:
-  # Credentials can be specified as either secret refs (recommended) or plain values.
-  # Secret ref example:
-  # arlo:
-  #   username:
-  #     valueFrom:
-  #       secretKeyRef:
-  #         name: arlo-creds
-  #         key: username
-  #
-  # Plain value example:
-  # arlo:
-  #   username:
-  #     value: "myaccount@example.com"
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -53,13 +41,40 @@ podAnnotations: {}
 podSecurityContext: {}
   # fsGroup: 2000
 
-securityContext: {}
+securityContext:
+  # privileged: false
   # capabilities:
   #   drop:
   #   - ALL
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+  frontailPort: 81
+
+ingress:
+  enabled: true
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: openhab.local
+      paths:
+      - path: /
+
+  frontail:
+    hosts:
+      - host: openhab-logs.local
+        paths:
+        - path: /
+
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

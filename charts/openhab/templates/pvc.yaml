@@ -1,0 +1,14 @@
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "openhab.persistentVolumeClaim" . }}
+  labels:
+    {{- include "openhab.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+{{- end }}

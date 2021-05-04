@@ -1,0 +1,8 @@
+apiVersion: v2
+name: any-manifest
+description: |
+  A wrapper Helm chart containing an arbitrary kubernetes manifest.
+  Can be used with Terraform for unsupported resource types.
+type: application
+version: 0.1.0
+appVersion: latest

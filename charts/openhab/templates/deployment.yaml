@@ -1,0 +1,133 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "openhab.fullname" . }}
+  labels:
+    {{- include "openhab.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "openhab.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "openhab.selectorLabels" . | nindent 8 }}
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "openhab.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: CRYPTO_POLICY
+              value: unlimited
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            failureThreshold: 60
+            periodSeconds: 10
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /etc/timezone
+              name: timezone
+              readOnly: true
+            - mountPath: /etc/localtime
+              name: localtime
+              readOnly: true
+            - mountPath: /openhab/conf
+              name: data
+              subPath: conf
+            - mountPath: /openhab/userdata
+              name: data
+              subPath: userdata
+            - mountPath: /openhab/addons
+              name: data
+              subPath: addons
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+        - name: frontail
+          image: "{{ .Values.frontailImage.repository }}:{{ .Values.frontailImage.tag | default "latest" }}"
+          imagePullPolicy: {{ .Values.frontailImage.pullPolicy }}
+          ports:
+            - containerPort: 9001
+              name: frontail
+          volumeMounts:
+            - mountPath: /var/log/openhab
+              name: data
+              subPath: userdata/logs
+              readOnly: true
+      volumes:
+        - name: timezone
+          hostPath:
+            path: /etc/timezone
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: data
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "openhab.persistentVolumeClaim" . }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      initContainers:
+        - name: init-data
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - mountPath: /data
+              name: data
+          command:
+            - bash
+            - -c
+            - |
+              [ -d /data/conf ]     || cp -a /openhab/conf /data/
+              [ -d /data/userdata ] || cp -a /openhab/userdata /data/
+              [ -d /data/addons ]   || cp -a /openhab/addons /data/
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

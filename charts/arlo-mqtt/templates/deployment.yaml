@@ -43,13 +43,25 @@ spec:
             {{- end }}
           env:
             - name: ARLO_USER
-              {{- toYaml (required ".Values.credentials.arlo.username is required!" .Values.credentials.arlo.username) | nindent 14 }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "arlo-mqtt.arloSecretName" . }}
+                  key: username
             - name: ARLO_PASS
-              {{- toYaml (required ".Values.credentials.arlo.password is required!" .Values.credentials.arlo.password) | nindent 14 }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "arlo-mqtt.arloSecretName" . }}
+                  key: password
             - name: ARLO_MQTT_USER
-              {{- toYaml (required ".Values.credentials.mqtt.username is required!" .Values.credentials.mqtt.username) | nindent 14 }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "arlo-mqtt.mqttSecretName" . }}
+                  key: username
             - name: ARLO_MQTT_PASS
-              {{- toYaml (required ".Values.credentials.mqtt.password is required!" .Values.credentials.mqtt.password) | nindent 14 }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "arlo-mqtt.mqttSecretName" . }}
+                  key: password
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
