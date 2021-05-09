@@ -1,0 +1,20 @@
+{{- if .Values.authHost.enabled -}}
+{{- $fullName := include "traefik-forward-auth.fullname" . -}}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "traefik-forward-auth.labels" . | nindent 4 }}
+spec:
+  entryPoints:
+    {{- required ".Values.authHost.entryPoints required!" .Values.authHost.entryPoints | toYaml | nindent 4 }}
+  routes:
+    - kind: Rule
+      match: Host(`{{ required ".Values.authHost.host required!" .Values.authHost.host }}`)
+      middlewares:
+        - name: {{ $fullName }}
+      services:
+        - name: {{ $fullName }}
+          port: {{ .Values.service.port }}
+{{- end }}

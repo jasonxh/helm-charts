@@ -1,27 +1,30 @@
-# Default values for openhab.
+# Default values for traefik-forward-auth.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-persistence:
+# Existing auth secret. All secret keys will be exposed as container env.
+# See https://github.com/thomseddon/traefik-forward-auth for details.
+authSecret: ""
+
+authHost:
   enabled: false
+  # entryPoints:
+  #   - websecure
+  # host: auth.example.com
+  # cookieDomain: example.com
 
-  # existingClaim: ""
-
-extraVolumes: []
-extraVolumeMounts: []
+# Extra envs to pass to the container.
+env: {}
+  # WHITELIST: "me@example.com"
+  # LOG_LEVEL: debug
 
 replicaCount: 1
 
 image:
-  repository: openhab/openhab
+  repository: thomseddon/traefik-forward-auth
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
-
-frontailImage:
-  repository: welteki/frontail-openhab
-  pullPolicy: IfNotPresent
-  tag: frontail4.9.2
 
 imagePullSecrets: []
 nameOverride: ""
@@ -42,7 +45,6 @@ podSecurityContext: {}
   # fsGroup: 2000
 
 securityContext: {}
-  # privileged: false
   # capabilities:
   #   drop:
   #   - ALL
@@ -53,28 +55,6 @@ securityContext: {}
 service:
   type: ClusterIP
   port: 80
-  frontailPort: 81
-
-ingress:
-  enabled: true
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: openhab.local
-      paths:
-      - path: /
-
-  frontail:
-    hosts:
-      - host: openhab-logs.local
-        paths:
-        - path: /
-
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
