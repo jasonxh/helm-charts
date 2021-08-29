@@ -1,0 +1,48 @@
+apiVersion: v1
+entries:
+  any-manifest:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2021-08-29T20:46:55.835204683Z"
+    description: 'A wrapper Helm chart containing an arbitrary kubernetes manifest.
+      Can be used with Terraform for unsupported resource types. '
+    digest: 4816a5f78bec195c8a06b78dbe5c123cd9968b502c5463cff58593246a234f99
+    name: any-manifest
+    type: application
+    urls:
+    - https://github.com/jasonxh/helm-charts/releases/download/any-manifest-0.1.0/any-manifest-0.1.0.tgz
+    version: 0.1.0
+  arlo-mqtt:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2021-08-29T20:46:55.975527839Z"
+    description: A Helm chart for arlo-mqtt
+    digest: b9614d8f5c204166192a8ffa30761fa7011c5438a992a5e64b86a470be6d8a38
+    name: arlo-mqtt
+    type: application
+    urls:
+    - https://github.com/jasonxh/helm-charts/releases/download/arlo-mqtt-0.1.0/arlo-mqtt-0.1.0.tgz
+    version: 0.1.0
+  openhab:
+  - apiVersion: v2
+    appVersion: 3.1.0
+    created: "2021-08-29T20:46:56.110923401Z"
+    description: A Helm chart for openHAB
+    digest: f0442a8199e510db114ca82e89448c360dbf491fb9d1a54ede83521460abeaf6
+    name: openhab
+    type: application
+    urls:
+    - https://github.com/jasonxh/helm-charts/releases/download/openhab-0.1.2/openhab-0.1.2.tgz
+    version: 0.1.2
+  traefik-forward-auth:
+  - apiVersion: v2
+    appVersion: 2.2.0
+    created: "2021-08-29T20:46:56.242125777Z"
+    description: A Helm chart for Traefik Forward Auth.
+    digest: 05532f88805812d10840f49715b5e0026ef2c567d199c75a7600b487904b3655
+    name: traefik-forward-auth
+    type: application
+    urls:
+    - https://github.com/jasonxh/helm-charts/releases/download/traefik-forward-auth-0.1.0/traefik-forward-auth-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-08-29T20:46:56.242134978Z"
