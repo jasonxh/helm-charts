@@ -15,6 +15,16 @@ entries:
   arlo-mqtt:
   - apiVersion: v2
     appVersion: latest
+    created: "2023-07-02T18:55:49.049268767Z"
+    description: A Helm chart for arlo-mqtt
+    digest: 3efc40b5a262debd0ab9839e23bc31cc274fdc3e86a2b0bad0d26c77ae8763e7
+    name: arlo-mqtt
+    type: application
+    urls:
+    - https://github.com/jasonxh/helm-charts/releases/download/arlo-mqtt-0.2.0/arlo-mqtt-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: latest
     created: "2021-08-29T20:46:55.975527839Z"
     description: A Helm chart for arlo-mqtt
     digest: b9614d8f5c204166192a8ffa30761fa7011c5438a992a5e64b86a470be6d8a38
@@ -55,4 +65,4 @@ entries:
     urls:
     - https://github.com/jasonxh/helm-charts/releases/download/traefik-forward-auth-0.1.0/traefik-forward-auth-0.1.0.tgz
     version: 0.1.0
-generated: "2021-11-11T05:03:05.604438236Z"
+generated: "2023-07-02T18:55:49.049281067Z"
