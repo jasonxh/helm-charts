@@ -52,6 +52,11 @@ spec:
                 secretKeyRef:
                   name: {{ include "arlo-mqtt.arloSecretName" . }}
                   key: password
+            - name: ARLO_EXTRAS_JSON
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "arlo-mqtt.arloSecretName" . }}
+                  key: extras_json
             - name: ARLO_MQTT_USER
               valueFrom:
                 secretKeyRef:

@@ -8,13 +8,24 @@ mqtt:
 
 credentials:
   arlo:
-    # If existingSecret is specified, it'll be used directly, ignoring username and password.
+    # If existingSecret is specified, it'll be used directly, ignoring all other values.
     # The secret must contain keys username and password.
     # existingSecret: ""
 
     # These plaintext values are used to create a secret if existingSecret is not specified.
     username: me@example.com
     password: supersecret
+
+    # Extra options to pass to Pyaarlo. Encoded as "extras_json" in the secret.
+    # See here for details: https://github.com/twrecked/pyaarlo
+    # extras:
+    #   tfa_source: imap
+    #   tfa_type: email
+    #   tfa_host: imap.host.com
+    #   tfa_username: your-user-name
+    #   tfa_password: your-imap-password
+    extras: {}
+
   mqtt:
     # If existingSecret is specified, it'll be used directly, ignoring username and password.
     # The secret must contain keys username and password.
